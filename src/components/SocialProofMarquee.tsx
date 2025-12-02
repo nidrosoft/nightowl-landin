@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const users = [
   { name: "@MidnightDreamer", mood: "Chill", color: "#22D3EE" },
@@ -63,50 +63,43 @@ function ReviewCard({ text, rating }: { text: string; rating: number }) {
 }
 
 export default function SocialProofMarquee() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Fewer items on mobile
+  const userItems = isMobile ? [...users.slice(0, 6), ...users.slice(0, 6)] : [...users, ...users, ...users];
+  const reviewItems = isMobile ? [...reviews, ...reviews] : [...reviews, ...reviews, ...reviews, ...reviews];
+
   return (
     <section className="py-12 overflow-hidden">
       {/* Users marquee - moving right */}
       <div className="relative mb-6">
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0D0D0D] to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0D0D0D] to-transparent z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-[#0D0D0D] to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-[#0D0D0D] to-transparent z-10" />
         
-        <motion.div
-          className="flex gap-4"
-          animate={{ x: [0, -1920] }}
-          transition={{
-            x: {
-              duration: 40,
-              repeat: Infinity,
-              ease: "linear",
-            },
-          }}
-        >
-          {[...users, ...users, ...users].map((user, i) => (
+        <div className="flex gap-4 marquee-left">
+          {userItems.map((user, i) => (
             <UserCard key={i} {...user} />
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Reviews marquee - moving left */}
       <div className="relative">
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0D0D0D] to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0D0D0D] to-transparent z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-[#0D0D0D] to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-[#0D0D0D] to-transparent z-10" />
         
-        <motion.div
-          className="flex gap-4"
-          animate={{ x: [-1920, 0] }}
-          transition={{
-            x: {
-              duration: 35,
-              repeat: Infinity,
-              ease: "linear",
-            },
-          }}
-        >
-          {[...reviews, ...reviews, ...reviews, ...reviews].map((review, i) => (
+        <div className="flex gap-4 marquee-right">
+          {reviewItems.map((review, i) => (
             <ReviewCard key={i} {...review} />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

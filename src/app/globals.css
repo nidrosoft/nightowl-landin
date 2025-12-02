@@ -291,6 +291,165 @@ img[loading] {
   opacity: 0;
 }
 
+/* Flying owl animation - GPU accelerated */
+@keyframes fly-across {
+  0% {
+    transform: translateX(-100px) scaleX(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100vw + 100px)) scaleX(1);
+    opacity: 0;
+  }
+}
+
+.flying-owl {
+  animation: fly-across 20s linear infinite;
+  will-change: transform;
+}
+
+/* Owl bobbing animation */
+@keyframes owl-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.owl-bob {
+  animation: owl-bob 1.5s ease-in-out infinite;
+}
+
+/* Firefly animation - GPU accelerated */
+@keyframes firefly-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(0.5);
+    opacity: 0;
+  }
+  25% {
+    transform: translate(10px, -10px) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-5px, 5px) scale(0.8);
+    opacity: 0.6;
+  }
+  75% {
+    transform: translate(8px, -15px) scale(1);
+    opacity: 1;
+  }
+}
+
+.firefly {
+  animation: firefly-float 4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Gradient orb animations - GPU accelerated */
+@keyframes orb-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 30px) scale(1.1); }
+}
+
+@keyframes orb-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-40px, 50px) scale(1.15); }
+}
+
+@keyframes orb-float-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -40px) scale(1.2); }
+}
+
+.gradient-orb-1 {
+  animation: orb-float-1 15s ease-in-out infinite;
+  will-change: transform;
+}
+
+.gradient-orb-2 {
+  animation: orb-float-2 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+.gradient-orb-3 {
+  animation: orb-float-3 12s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Shooting star CSS animation */
+.shooting-star {
+  animation: shooting-star 1s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+/* Marquee animations - GPU accelerated */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.marquee-left {
+  animation: marquee-left 40s linear infinite;
+  will-change: transform;
+}
+
+.marquee-right {
+  animation: marquee-right 35s linear infinite;
+  will-change: transform;
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 768px) {
+  /* Slower marquee on mobile for less CPU usage */
+  .marquee-left {
+    animation-duration: 30s;
+  }
+  
+  .marquee-right {
+    animation-duration: 25s;
+  }
+  /* Disable heavy animations on mobile */
+  .flying-owl,
+  .gradient-orb-1,
+  .gradient-orb-2,
+  .gradient-orb-3 {
+    animation: none !important;
+  }
+  
+  /* Reduce blur on mobile for better performance */
+  .blur-3xl {
+    filter: blur(32px) !important;
+  }
+  
+  .blur-2xl {
+    filter: blur(24px) !important;
+  }
+  
+  /* Simplify backdrop blur on mobile */
+  .backdrop-blur-sm,
+  .backdrop-blur {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+  
+  /* Use hardware acceleration */
+  .mobile-padding,
+  section,
+  .glass {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

@@ -4,42 +4,51 @@ import { useEffect, useState, useMemo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Sparkles, Apple, Play, ChevronDown } from "lucide-react";
 
-// Star component for the starfield
-function Star({ delay, duration, size, top, left }: { 
-  delay: number; 
-  duration: number; 
+// Hook to detect mobile
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  return isMobile;
+}
+
+// Star component - CSS animation for better performance
+function Star({ size, top, left, delay }: { 
   size: number;
   top: string;
   left: string;
+  delay: number;
 }) {
   return (
-    <motion.div
-      className="absolute rounded-full bg-white"
+    <div
+      className="absolute rounded-full bg-white animate-pulse"
       style={{
         width: size,
         height: size,
         top,
         left,
-      }}
-      animate={{
-        opacity: [0.3, 1, 0.3],
-      }}
-      transition={{
-        duration,
-        delay,
-        repeat: Infinity,
-        ease: "easeInOut",
+        animationDelay: `${delay}s`,
+        animationDuration: '3s',
+        willChange: 'opacity',
       }}
     />
   );
 }
 
-// Shooting star component
-function ShootingStar() {
+// Shooting star component - only on desktop
+function ShootingStar({ isMobile }: { isMobile: boolean }) {
   const [show, setShow] = useState(false);
   const [position, setPosition] = useState({ top: "20%", left: "10%" });
 
   useEffect(() => {
+    if (isMobile) return; // Skip on mobile
+    
     const interval = setInterval(() => {
       setPosition({
         top: `${Math.random() * 40}%`,
@@ -47,69 +56,51 @@ function ShootingStar() {
       });
       setShow(true);
       setTimeout(() => setShow(false), 1000);
-    }, 6000);
+    }, 8000); // Slower interval
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile]);
 
-  if (!show) return null;
+  if (!show || isMobile) return null;
 
   return (
-    <motion.div
-      className="absolute w-1 h-1 bg-white rounded-full"
+    <div
+      className="absolute w-1 h-1 bg-white rounded-full shooting-star"
       style={{ top: position.top, left: position.left }}
-      initial={{ opacity: 1, x: 0, y: 0 }}
-      animate={{ opacity: 0, x: 300, y: 300 }}
-      transition={{ duration: 1, ease: "easeOut" }}
     >
       <div className="absolute w-20 h-0.5 bg-gradient-to-r from-white to-transparent -rotate-45 origin-left" />
-    </motion.div>
+    </div>
   );
 }
 
-// Flying Owl SVG Component
-function FlyingOwl({ delay, duration, startX, startY, endX, size, flip }: {
+// Flying Owl SVG Component - simplified for performance
+function FlyingOwl({ delay, duration, startY, size, flip, isMobile }: {
   delay: number;
   duration: number;
-  startX: string;
   startY: string;
-  endX: string;
   size: number;
   flip?: boolean;
+  isMobile: boolean;
 }) {
+  // Skip owls on mobile for performance
+  if (isMobile) return null;
+  
   return (
-    <motion.div
-      className="absolute pointer-events-none"
+    <div
+      className="absolute pointer-events-none flying-owl"
       style={{ 
-        left: startX, 
         top: startY,
         transform: flip ? 'scaleX(-1)' : 'scaleX(1)',
-      }}
-      initial={{ x: 0, opacity: 0 }}
-      animate={{ 
-        x: endX,
-        opacity: [0, 1, 1, 1, 0],
-      }}
-      transition={{
-        duration,
-        delay,
-        repeat: Infinity,
-        ease: "linear",
+        animationDelay: `${delay}s`,
+        animationDuration: `${duration}s`,
       }}
     >
-      <motion.svg
+      <svg
         width={size}
         height={size}
         viewBox="0 0 64 64"
         fill="none"
-        animate={{
-          y: [0, -8, 0, 8, 0],
-        }}
-        transition={{
-          duration: 1.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+        className="owl-bob"
       >
         {/* Owl body */}
         <ellipse cx="32" cy="36" rx="14" ry="16" fill="#4C1D95" />
@@ -125,71 +116,50 @@ function FlyingOwl({ delay, duration, startX, startY, endX, size, flip }: {
         <circle cx="37" cy="22" r="2" fill="#0D0D0D" />
         {/* Beak */}
         <path d="M32 26 L30 30 L34 30 Z" fill="#FB923C" />
-        {/* Wings - animated */}
-        <motion.path
-          d="M18 36 Q8 30 4 40 Q12 38 18 42 Z"
-          fill="#7C3AED"
-          animate={{
-            d: [
-              "M18 36 Q8 30 4 40 Q12 38 18 42 Z",
-              "M18 36 Q8 26 4 32 Q12 34 18 38 Z",
-              "M18 36 Q8 30 4 40 Q12 38 18 42 Z",
-            ],
-          }}
-          transition={{
-            duration: 0.3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.path
-          d="M46 36 Q56 30 60 40 Q52 38 46 42 Z"
-          fill="#7C3AED"
-          animate={{
-            d: [
-              "M46 36 Q56 30 60 40 Q52 38 46 42 Z",
-              "M46 36 Q56 26 60 32 Q52 34 46 38 Z",
-              "M46 36 Q56 30 60 40 Q52 38 46 42 Z",
-            ],
-          }}
-          transition={{
-            duration: 0.3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      </motion.svg>
-    </motion.div>
+        {/* Static wings */}
+        <path d="M18 36 Q8 30 4 40 Q12 38 18 42 Z" fill="#7C3AED" className="wing-flap" />
+        <path d="M46 36 Q56 30 60 40 Q52 38 46 42 Z" fill="#7C3AED" className="wing-flap" />
+      </svg>
+    </div>
   );
 }
 
-// Firefly component
-function Firefly({ delay, x, y }: { delay: number; x: string; y: string }) {
+// Firefly component - CSS animation for performance
+function Firefly({ delay, x, y, isMobile }: { delay: number; x: string; y: string; isMobile: boolean }) {
+  // Reduce fireflies on mobile
+  if (isMobile && delay > 3) return null;
+  
   return (
-    <motion.div
-      className="absolute w-2 h-2 rounded-full"
-      style={{ left: x, top: y }}
-      animate={{
-        opacity: [0, 1, 0.5, 1, 0],
-        scale: [0.5, 1, 0.8, 1, 0.5],
-        x: [0, 20, -10, 15, 0],
-        y: [0, -15, 10, -20, 0],
-      }}
-      transition={{
-        duration: 4,
-        delay,
-        repeat: Infinity,
-        ease: "easeInOut",
+    <div
+      className="absolute w-2 h-2 rounded-full firefly"
+      style={{ 
+        left: x, 
+        top: y,
+        animationDelay: `${delay}s`,
       }}
     >
-      <div className="w-full h-full rounded-full bg-[#FCD34D] blur-sm" />
-      <div className="absolute inset-0 rounded-full bg-[#FCD34D]" />
-    </motion.div>
+      <div className="w-full h-full rounded-full bg-[#FCD34D]" />
+    </div>
   );
 }
 
-// City Skyline Component
-function CitySkyline() {
+// City Skyline Component - static windows, CSS animation
+function CitySkyline({ isMobile }: { isMobile: boolean }) {
+  // Simplified version for mobile
+  const windowLights = isMobile 
+    ? [[115, 95], [245, 75], [380, 85], [525, 65], [730, 80]]
+    : [
+        [115, 95], [125, 110], [135, 125], [115, 140],
+        [245, 75], [255, 90], [245, 105], [260, 120], [250, 150],
+        [380, 85], [395, 100], [385, 115], [400, 130], [390, 155],
+        [525, 65], [540, 80], [530, 95], [545, 110], [535, 140],
+        [730, 80], [745, 95], [735, 110], [750, 125], [740, 150],
+        [870, 90], [885, 105], [875, 120], [890, 145],
+        [1000, 70], [1015, 85], [1005, 100], [1020, 115], [1010, 145],
+        [1140, 85], [1155, 100], [1145, 115], [1160, 130], [1150, 155],
+        [1280, 95], [1295, 110], [1285, 125], [1300, 145],
+      ];
+
   return (
     <div className="absolute bottom-0 left-0 right-0 h-48 overflow-hidden pointer-events-none">
       <svg
@@ -220,34 +190,17 @@ function CitySkyline() {
         <rect x="1260" y="80" width="55" height="120" fill="#1A1A1A" />
         <rect x="1340" y="95" width="50" height="105" fill="#1A1A1A" />
         
-        {/* Window lights - scattered yellow dots */}
-        {[
-          [115, 95], [125, 110], [135, 125], [115, 140],
-          [245, 75], [255, 90], [245, 105], [260, 120], [250, 150],
-          [380, 85], [395, 100], [385, 115], [400, 130], [390, 155],
-          [525, 65], [540, 80], [530, 95], [545, 110], [535, 140],
-          [730, 80], [745, 95], [735, 110], [750, 125], [740, 150],
-          [870, 90], [885, 105], [875, 120], [890, 145],
-          [1000, 70], [1015, 85], [1005, 100], [1020, 115], [1010, 145],
-          [1140, 85], [1155, 100], [1145, 115], [1160, 130], [1150, 155],
-          [1280, 95], [1295, 110], [1285, 125], [1300, 145],
-        ].map(([x, y], i) => (
-          <motion.rect
+        {/* Window lights - CSS animation */}
+        {windowLights.map(([x, y], i) => (
+          <rect
             key={i}
             x={x}
             y={y}
             width="4"
             height="4"
             fill="#FCD34D"
-            animate={{
-              opacity: [0.3, 1, 0.3],
-            }}
-            transition={{
-              duration: 2 + (i % 3),
-              delay: i * 0.2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
+            className="animate-pulse"
+            style={{ animationDelay: `${i * 0.3}s`, animationDuration: '3s' }}
           />
         ))}
       </svg>
@@ -257,62 +210,56 @@ function CitySkyline() {
   );
 }
 
-// Floating gradient orbs
-function GradientOrbs() {
+// Floating gradient orbs - static on mobile, animated on desktop
+function GradientOrbs({ isMobile }: { isMobile: boolean }) {
+  // Static orbs for mobile (no animation = better performance)
+  if (isMobile) {
+    return (
+      <>
+        <div
+          className="absolute w-[300px] h-[300px] rounded-full opacity-20 pointer-events-none"
+          style={{
+            background: "radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%)",
+            top: "10%",
+            left: "-10%",
+          }}
+        />
+        <div
+          className="absolute w-[250px] h-[250px] rounded-full opacity-15 pointer-events-none"
+          style={{
+            background: "radial-gradient(circle, rgba(124, 58, 237, 0.4) 0%, transparent 70%)",
+            top: "40%",
+            right: "-5%",
+          }}
+        />
+      </>
+    );
+  }
+
   return (
     <>
-      <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full opacity-30 blur-3xl pointer-events-none"
+      <div
+        className="absolute w-[600px] h-[600px] rounded-full opacity-30 blur-2xl pointer-events-none gradient-orb-1"
         style={{
           background: "radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%)",
           top: "10%",
           left: "-10%",
         }}
-        animate={{
-          x: [0, 50, 0],
-          y: [0, 30, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
       />
-      <motion.div
-        className="absolute w-[500px] h-[500px] rounded-full opacity-20 blur-3xl pointer-events-none"
+      <div
+        className="absolute w-[500px] h-[500px] rounded-full opacity-20 blur-2xl pointer-events-none gradient-orb-2"
         style={{
           background: "radial-gradient(circle, rgba(124, 58, 237, 0.4) 0%, transparent 70%)",
           top: "40%",
           right: "-5%",
         }}
-        animate={{
-          x: [0, -40, 0],
-          y: [0, 50, 0],
-          scale: [1, 1.15, 1],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
       />
-      <motion.div
-        className="absolute w-[400px] h-[400px] rounded-full opacity-20 blur-3xl pointer-events-none"
+      <div
+        className="absolute w-[400px] h-[400px] rounded-full opacity-20 blur-2xl pointer-events-none gradient-orb-3"
         style={{
           background: "radial-gradient(circle, rgba(244, 114, 182, 0.3) 0%, transparent 70%)",
           bottom: "20%",
           left: "30%",
-        }}
-        animate={{
-          x: [0, 30, 0],
-          y: [0, -40, 0],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "easeInOut",
         }}
       />
     </>
@@ -321,32 +268,36 @@ function GradientOrbs() {
 
 export default function Hero() {
   const [onlineCount, setOnlineCount] = useState(2847);
+  const isMobile = useIsMobile();
   const { scrollY } = useScroll();
-  const moonY = useTransform(scrollY, [0, 500], [0, 150]);
-  const contentY = useTransform(scrollY, [0, 500], [0, 100]);
+  
+  // Disable parallax on mobile for performance
+  const moonY = useTransform(scrollY, [0, 500], isMobile ? [0, 0] : [0, 150]);
+  const contentY = useTransform(scrollY, [0, 500], isMobile ? [0, 0] : [0, 100]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
-  // Generate stars with stable positions using useMemo
+  // Generate stars - fewer on mobile
   const stars = useMemo(() => {
-    return Array.from({ length: 80 }, (_, i) => ({
+    const count = isMobile ? 30 : 80;
+    return Array.from({ length: count }, (_, i) => ({
       id: i,
       delay: (i * 0.1) % 3,
-      duration: 2 + (i % 3),
       size: i % 5 === 0 ? 3 : i % 3 === 0 ? 2 : 1,
       top: `${Math.floor((i * 17) % 85)}%`,
       left: `${Math.floor((i * 23) % 100)}%`,
     }));
-  }, []);
+  }, [isMobile]);
 
-  // Generate fireflies
+  // Generate fireflies - fewer on mobile
   const fireflies = useMemo(() => {
-    return Array.from({ length: 15 }, (_, i) => ({
+    const count = isMobile ? 5 : 15;
+    return Array.from({ length: count }, (_, i) => ({
       id: i,
       delay: i * 0.5,
       x: `${10 + (i * 7) % 80}%`,
       y: `${50 + (i * 11) % 40}%`,
     }));
-  }, []);
+  }, [isMobile]);
 
   // Simulate online count fluctuation
   useEffect(() => {
@@ -362,30 +313,29 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#0D0D0D] via-[#1a1033] to-[#0D0D0D]" />
 
       {/* Animated gradient orbs */}
-      <GradientOrbs />
+      <GradientOrbs isMobile={isMobile} />
 
       {/* Starfield */}
       <div className="absolute inset-0 overflow-hidden">
         {stars.map((star) => (
           <Star key={star.id} {...star} />
         ))}
-        <ShootingStar />
-        <ShootingStar />
+        <ShootingStar isMobile={isMobile} />
       </div>
 
-      {/* Flying Owls */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <FlyingOwl delay={0} duration={20} startX="-10%" startY="20%" endX="120vw" size={48} />
-        <FlyingOwl delay={5} duration={25} startX="-10%" startY="35%" endX="120vw" size={36} />
-        <FlyingOwl delay={10} duration={18} startX="110%" startY="15%" endX="-120vw" size={42} flip />
-        <FlyingOwl delay={15} duration={22} startX="110%" startY="40%" endX="-120vw" size={32} flip />
-        <FlyingOwl delay={8} duration={28} startX="-10%" startY="50%" endX="120vw" size={28} />
-      </div>
+      {/* Flying Owls - desktop only */}
+      {!isMobile && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <FlyingOwl delay={0} duration={20} startY="20%" size={48} isMobile={isMobile} />
+          <FlyingOwl delay={5} duration={25} startY="35%" size={36} isMobile={isMobile} />
+          <FlyingOwl delay={10} duration={18} startY="15%" size={42} flip isMobile={isMobile} />
+        </div>
+      )}
 
       {/* Fireflies */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {fireflies.map((firefly) => (
-          <Firefly key={firefly.id} {...firefly} />
+          <Firefly key={firefly.id} {...firefly} isMobile={isMobile} />
         ))}
       </div>
 
@@ -432,7 +382,7 @@ export default function Hero() {
       </motion.div>
 
       {/* City Skyline */}
-      <CitySkyline />
+      <CitySkyline isMobile={isMobile} />
 
       {/* Content - parallax */}
       <motion.div 
