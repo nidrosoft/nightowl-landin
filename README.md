@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Night Owl - Landing Page
+
+A premium, conversion-focused landing page for **Night Owl** - a late-night social app for insomniacs, night owls, and anyone who finds themselves awake when the world sleeps.
+
+## Features
+
+- **Modern Stack**: Built with Next.js 16, TypeScript, and Tailwind CSS
+- **Smooth Animations**: Powered by Framer Motion for delightful interactions
+- **Responsive Design**: Fully responsive across all device sizes
+- **Dark Theme**: Beautiful dark mode design optimized for night viewing
+- **Performance Optimized**: Fast loading with optimized assets
+
+## Sections
+
+1. **Navigation** - Sticky glass-morphism navbar with smooth scroll
+2. **Hero** - Animated starfield, moon, and compelling CTAs
+3. **Problem Statement** - Pain points that resonate with the target audience
+4. **Features** - Interactive tabbed showcase with phone mockups
+5. **How It Works** - Simple 4-step onboarding flow
+6. **Night Mode Lock** - Unique feature highlight with split mockup
+7. **Testimonials** - Social proof with animated counters
+8. **Pricing** - Free vs Premium comparison
+9. **FAQ** - Accordion-style frequently asked questions
+10. **Final CTA** - Conversion-focused download section
+11. **Footer** - Links and social media
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the landing page.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Fonts**: Inter, DM Sans (Google Fonts)
 
-## Learn More
+## Color Palette
 
-To learn more about Next.js, take a look at the following resources:
+| Color | Hex | Usage |
+|-------|-----|-------|
+| Deep Black | `#0D0D0D` | Background |
+| Surface | `#1A1A1A` | Elevated surfaces |
+| Card | `#262626` | Card backgrounds |
+| Purple Primary | `#8B5CF6` | Main accent |
+| Purple Light | `#C4B5FD` | Brand primary |
+| Success | `#6EE7B7` | Online indicators |
+| Warning | `#FCD34D` | Timers/alerts |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/
+│   ├── globals.css      # Global styles and CSS variables
+│   ├── layout.tsx       # Root layout with fonts
+│   └── page.tsx         # Main landing page
+└── components/
+    ├── Navigation.tsx   # Sticky navbar
+    ├── Hero.tsx         # Hero section with animations
+    ├── ProblemStatement.tsx
+    ├── Features.tsx     # Tabbed feature showcase
+    ├── HowItWorks.tsx   # Step-by-step guide
+    ├── NightModeLock.tsx
+    ├── Testimonials.tsx # Reviews and stats
+    ├── Pricing.tsx      # Pricing comparison
+    ├── FAQ.tsx          # Accordion FAQ
+    ├── FinalCTA.tsx     # Download section
+    └── Footer.tsx       # Site footer
+```
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deploy easily to Vercel:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-repo/nightowl-landing)
+
+## License
+
+MIT License - feel free to use this template for your projects.
