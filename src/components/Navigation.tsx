@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
-import { Moon, Menu, X, Download, Sparkles } from "lucide-react";
+import { Moon, Menu, X, Sparkles } from "lucide-react";
+import { useWaitlist } from "@/context/WaitlistContext";
 
 const navLinks = [
   { name: "Features", href: "#features" },
@@ -14,6 +15,7 @@ const navLinks = [
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { openWaitlist } = useWaitlist();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -76,13 +78,13 @@ export default function Navigation() {
 
             {/* CTA Button */}
             <div className="hidden md:block">
-              <a
-                href="#download"
+              <button
+                onClick={openWaitlist}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-white font-semibold rounded-full hover:shadow-lg hover:shadow-[#8B5CF6]/25 transition-all duration-300 hover:-translate-y-0.5"
               >
-                <Download className="w-4 h-4" />
-                Download
-              </a>
+                <Sparkles className="w-4 h-4" />
+                Join the Waitlist
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -127,14 +129,16 @@ export default function Navigation() {
                     {link.name}
                   </a>
                 ))}
-                <a
-                  href="#download"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    openWaitlist();
+                  }}
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-white font-semibold rounded-full mt-2"
                 >
-                  <Download className="w-4 h-4" />
-                  Download
-                </a>
+                  <Sparkles className="w-4 h-4" />
+                  Join the Waitlist
+                </button>
               </div>
             </div>
           </motion.div>

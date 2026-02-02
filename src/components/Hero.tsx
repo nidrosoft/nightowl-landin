@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Sparkles, Apple, Play, ChevronDown } from "lucide-react";
+import { Sparkles, ChevronDown } from "lucide-react";
+import { useWaitlist } from "@/context/WaitlistContext";
 
 // Hook to detect mobile
 function useIsMobile() {
@@ -269,6 +270,7 @@ function GradientOrbs({ isMobile }: { isMobile: boolean }) {
 export default function Hero() {
   const [onlineCount, setOnlineCount] = useState(2847);
   const isMobile = useIsMobile();
+  const { openWaitlist } = useWaitlist();
   const { scrollY } = useScroll();
   
   // Disable parallax on mobile for performance
@@ -441,24 +443,15 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-6 px-4"
         >
-          <motion.a
-            href="#download"
+          <motion.button
+            onClick={openWaitlist}
             className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-white font-semibold rounded-full transition-all duration-300"
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(139, 92, 246, 0.4)" }}
             whileTap={{ scale: 0.98 }}
           >
-            <Apple className="w-5 h-5" />
-            Download for iOS
-          </motion.a>
-          <motion.a
-            href="#download"
-            className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 border-2 border-[#8B5CF6] text-white font-semibold rounded-full transition-all duration-300"
-            whileHover={{ scale: 1.05, backgroundColor: "rgba(139, 92, 246, 0.1)" }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Play className="w-5 h-5" />
-            Download for Android
-          </motion.a>
+            <Sparkles className="w-5 h-5" />
+            Join the Waitlist
+          </motion.button>
         </motion.div>
 
         {/* Tertiary text */}

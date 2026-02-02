@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, DM_Sans } from "next/font/google";
 import "./globals.css";
+import { WaitlistProvider } from "@/context/WaitlistContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -64,7 +65,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${dmSans.variable} antialiased bg-[#0D0D0D] text-white`}
       >
-        {children}
+        <WaitlistProvider>
+          {children}
+        </WaitlistProvider>
       </body>
     </html>
   );

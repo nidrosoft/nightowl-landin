@@ -2,7 +2,8 @@
 
 import { useRef, useEffect, useState, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
-import { Apple, Play, Moon, Star, Sparkles } from "lucide-react";
+import { Moon, Star, Sparkles } from "lucide-react";
+import { useWaitlist } from "@/context/WaitlistContext";
 
 // Floating star component
 function FloatingStar({ delay, x, y, size }: { delay: number; x: string; y: string; size: number }) {
@@ -31,6 +32,7 @@ export default function FinalCTA() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [onlineCount, setOnlineCount] = useState(2847);
+  const { openWaitlist } = useWaitlist();
 
   // Generate floating stars
   const stars = useMemo(() => {
@@ -171,26 +173,13 @@ export default function FinalCTA() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
         >
-          <a
-            href="#"
+          <button
+            onClick={openWaitlist}
             className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-white font-semibold rounded-full hover:shadow-xl hover:shadow-[#8B5CF6]/30 transition-all duration-300 hover:-translate-y-1"
           >
-            <Apple className="w-6 h-6" />
-            <div className="text-left">
-              <div className="text-xs opacity-80">Download on the</div>
-              <div className="text-sm font-bold">App Store</div>
-            </div>
-          </a>
-          <a
-            href="#"
-            className="group inline-flex items-center gap-3 px-8 py-4 border-2 border-[#8B5CF6] text-white font-semibold rounded-full hover:bg-[#8B5CF6]/10 transition-all duration-300 hover:-translate-y-1"
-          >
-            <Play className="w-6 h-6" />
-            <div className="text-left">
-              <div className="text-xs opacity-80">Get it on</div>
-              <div className="text-sm font-bold">Google Play</div>
-            </div>
-          </a>
+            <Sparkles className="w-6 h-6" />
+            <span className="text-base font-bold">Join the Waitlist</span>
+          </button>
         </motion.div>
 
         {/* Final text */}
