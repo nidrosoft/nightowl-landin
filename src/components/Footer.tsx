@@ -5,7 +5,7 @@ import { Moon } from "lucide-react";
 const footerLinks = {
   product: [
     { name: "Features", href: "#features" },
-    { name: "Pricing", href: "#pricing" },
+    { name: "Coming Soon", href: "#pricing" },
     { name: "Download", href: "#download" },
     { name: "What's New", href: "#" },
   ],
@@ -151,7 +151,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-[#262626] flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[#A1A1AA] text-sm">
-            © 2025 Night Owl. All rights reserved.
+            © 2026 Night Owl. All rights reserved.
           </p>
           <p className="text-[#A1A1AA] text-sm flex items-center gap-1">
             Made with <span className="text-red-500">❤️</span> by{" "}

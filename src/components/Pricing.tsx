@@ -2,26 +2,24 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Check, Sparkles, Crown } from "lucide-react";
+import { Check, Sparkles, Rocket, Zap, Heart, Users, MessageCircle, Mic, Shield, Palette, Bell, Globe } from "lucide-react";
 
-const freeFeatures = [
-  "Unlimited mood matching",
-  "Join audio lounges",
-  "Share thoughts",
-  "Basic chat features",
-  "3 moods per match session",
+const socialFeatures = [
+  { icon: Heart, title: "Mood-Based Matching", description: "Connect with people who feel the same way you do right now" },
+  { icon: MessageCircle, title: "Anonymous Whispers", description: "Share your deepest thoughts without revealing your identity" },
+  { icon: Mic, title: "Live Audio Lounges", description: "Join voice rooms for late-night conversations and debates" },
+  { icon: Users, title: "Night Owl Communities", description: "Find your tribe in topic-based groups that come alive at night" },
+  { icon: Shield, title: "Safe Space Guarantee", description: "AI-powered moderation keeps conversations respectful" },
+  { icon: Zap, title: "Instant Connections", description: "No swiping, no waiting—get matched in seconds" },
 ];
 
 const premiumFeatures = [
-  "Everything in Free",
-  "Unlimited mood selections",
-  "Priority matching",
-  "Voice call your matches",
-  "See who liked your thoughts",
-  "Custom alias colors",
-  "Invisible mode",
-  "Ad-free (we're already ad-free, but future-proof)",
-  "Early access to new features",
+  { icon: Palette, title: "Custom Themes & Colors", description: "Personalize your Night Owl experience with unique styles" },
+  { icon: Bell, title: "Smart Notifications", description: "Get notified when your mood matches are most active" },
+  { icon: Globe, title: "Global Night Network", description: "Connect with night owls across different time zones" },
+  { icon: Rocket, title: "Priority Matching", description: "Be first in line when someone shares your mood" },
+  { icon: Heart, title: "Unlimited Mood Selections", description: "Express yourself with unlimited mood combinations" },
+  { icon: Users, title: "Private Lounges", description: "Create invite-only audio rooms for your inner circle" },
 ];
 
 export default function Pricing() {
@@ -30,7 +28,7 @@ export default function Pricing() {
 
   return (
     <section className="relative py-24 md:py-32 overflow-hidden">
-      <div ref={ref} className="max-w-5xl mx-auto px-4">
+      <div ref={ref} className="max-w-6xl mx-auto px-4">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -39,100 +37,101 @@ export default function Pricing() {
           className="text-center mb-16"
         >
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8B5CF6]/10 text-[#8B5CF6] text-sm font-medium mb-4 uppercase tracking-wider">
-            <Crown className="w-4 h-4" />
-            Night Owl+
+            <Rocket className="w-4 h-4" />
+            Coming Soon
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold">
-            Unlock the <span className="gradient-text">full experience</span>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            What&apos;s <span className="gradient-text">coming next</span>
           </h2>
+          <p className="text-[#A1A1AA] text-lg max-w-2xl mx-auto">
+            We&apos;re building the ultimate late-night social experience. Here&apos;s a sneak peek at what&apos;s in store.
+          </p>
         </motion.div>
 
-        {/* Pricing Cards */}
+        {/* Feature Cards */}
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Free Plan */}
+          {/* Core Features */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative p-8 rounded-2xl bg-[#1A1A1A]/60 border border-[#262626]"
           >
-            <div className="mb-6">
-              <h3 className="text-2xl font-bold mb-2">Free</h3>
-              <p className="text-[#A1A1AA]">Always free, forever</p>
-            </div>
-
             <div className="mb-8">
-              <span className="text-4xl font-bold">$0</span>
-              <span className="text-[#A1A1AA]">/month</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#6EE7B7]/10 text-[#6EE7B7] text-sm font-medium mb-4">
+                <Sparkles className="w-3 h-3" />
+                Launch Features
+              </div>
+              <h3 className="text-2xl font-bold mb-2">Core Experience</h3>
+              <p className="text-[#A1A1AA]">Everything you need to connect at night</p>
             </div>
 
-            <ul className="space-y-4 mb-8">
-              {freeFeatures.map((feature) => (
-                <li key={feature} className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-[#6EE7B7]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Check className="w-3 h-3 text-[#6EE7B7]" />
+            <ul className="space-y-5">
+              {socialFeatures.map((feature) => (
+                <li key={feature.title} className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-[#6EE7B7]/10 flex items-center justify-center flex-shrink-0">
+                    <feature.icon className="w-5 h-5 text-[#6EE7B7]" />
                   </div>
-                  <span className="text-[#A1A1AA]">{feature}</span>
+                  <div>
+                    <h4 className="font-semibold text-white mb-1">{feature.title}</h4>
+                    <p className="text-sm text-[#A1A1AA]">{feature.description}</p>
+                  </div>
                 </li>
               ))}
             </ul>
-
-            <a
-              href="#download"
-              className="block w-full py-3 text-center rounded-full border-2 border-[#262626] text-white font-semibold hover:border-[#8B5CF6]/50 transition-colors"
-            >
-              Get Started Free
-            </a>
           </motion.div>
 
-          {/* Premium Plan */}
+          {/* Premium Features */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="relative p-8 rounded-2xl bg-gradient-to-br from-[#8B5CF6]/20 to-[#4C1D95]/20 border border-[#8B5CF6]/30"
           >
-            {/* Popular badge */}
+            {/* Badge */}
             <div className="absolute -top-3 left-1/2 -translate-x-1/2">
               <span className="inline-flex items-center gap-1 px-4 py-1 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-white text-sm font-medium">
-                <Sparkles className="w-3 h-3" />
-                Most Popular
+                <Zap className="w-3 h-3" />
+                Night Owl+
               </span>
             </div>
 
-            <div className="mb-6">
-              <h3 className="text-2xl font-bold mb-2">Night Owl+</h3>
-              <p className="text-[#A1A1AA]">For the true night owls</p>
+            <div className="mb-8 mt-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B5CF6]/10 text-[#8B5CF6] text-sm font-medium mb-4">
+                <Rocket className="w-3 h-3" />
+                Premium Features
+              </div>
+              <h3 className="text-2xl font-bold mb-2">Enhanced Experience</h3>
+              <p className="text-[#A1A1AA]">Take your night owl journey to the next level</p>
             </div>
 
-            <div className="mb-8">
-              <span className="text-4xl font-bold">$4.99</span>
-              <span className="text-[#A1A1AA]">/month</span>
-            </div>
-
-            <ul className="space-y-4 mb-8">
+            <ul className="space-y-5">
               {premiumFeatures.map((feature) => (
-                <li key={feature} className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-[#8B5CF6]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Check className="w-3 h-3 text-[#8B5CF6]" />
+                <li key={feature.title} className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-[#8B5CF6]/20 flex items-center justify-center flex-shrink-0">
+                    <feature.icon className="w-5 h-5 text-[#8B5CF6]" />
                   </div>
-                  <span className="text-white">{feature}</span>
+                  <div>
+                    <h4 className="font-semibold text-white mb-1">{feature.title}</h4>
+                    <p className="text-sm text-[#A1A1AA]">{feature.description}</p>
+                  </div>
                 </li>
               ))}
             </ul>
-
-            <a
-              href="#download"
-              className="block w-full py-3 text-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-white font-semibold hover:shadow-lg hover:shadow-[#8B5CF6]/25 transition-all"
-            >
-              Start 7-Day Free Trial
-            </a>
-
-            <p className="text-center text-xs text-[#A1A1AA] mt-4">
-              Cancel anytime. No questions asked.
-            </p>
           </motion.div>
         </div>
+
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-center mt-12"
+        >
+          <p className="text-[#A1A1AA]">
+            Join the waitlist to be the first to experience these features when we launch.
+          </p>
+        </motion.div>
       </div>
     </section>
   );
